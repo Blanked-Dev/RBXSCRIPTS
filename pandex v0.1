@@ -1,0 +1,79 @@
+local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "BlackGUI"
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local blackFrame = Instance.new("Frame")
+blackFrame.Name = "BlackFrame"
+blackFrame.Size = UDim2.new(0.4, 0, 0.4, 0)
+blackFrame.Position = UDim2.new(0.3, 0, 0.3, 0)
+blackFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+blackFrame.BorderSizePixel = 0
+blackFrame.Visible = true
+blackFrame.Parent = screenGui
+
+local uiCorner = Instance.new("UICorner")
+uiCorner.CornerRadius = UDim.new(0, 10)
+uiCorner.Parent = blackFrame
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Name = "TitleLabel"
+titleLabel.Size = UDim2.new(1, 0, 0.2, 0)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+titleLabel.BackgroundTransparency = 0.5
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextSize = 14
+titleLabel.Text = "Pandex Hub"
+titleLabel.TextStrokeTransparency = 0.5
+titleLabel.Parent = blackFrame
+
+local speedLabel = Instance.new("TextLabel")
+speedLabel.Name = "SpeedLabel"
+speedLabel.Size = UDim2.new(0.3, 0, 0.1, 0)
+speedLabel.Position = UDim2.new(0.05, 0, 0.25, 0)
+speedLabel.BackgroundTransparency = 1
+speedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+speedLabel.TextSize = 12
+speedLabel.Text = "Speed"
+speedLabel.Parent = blackFrame
+
+local speedBox = Instance.new("TextBox")
+speedBox.Name = "SpeedBox"
+speedBox.Size = UDim2.new(0.3, 0, 0.1, 0)
+speedBox.Position = UDim2.new(0.4, 0, 0.25, 0)
+speedBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+speedBox.TextColor3 = Color3.fromRGB(0, 0, 0)
+speedBox.TextSize = 12
+speedBox.PlaceholderText = "Enter speed"
+speedBox.ClearTextOnFocus = true
+speedBox.Parent = blackFrame
+
+local function setPlayerWalkSpeed(speed)
+    local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.WalkSpeed = speed
+    end
+end
+
+local function onTextChanged()
+    local text = speedBox.Text
+    local speed = tonumber(text)
+    if speed and speed > 0 then
+        setPlayerWalkSpeed(speed)
+    end
+end
+
+speedBox.FocusLost:Connect(onTextChanged)
+
+local function toggleFrameVisibility()
+    blackFrame.Visible = not blackFrame.Visible
+end
+
+local UserInputService = game:GetService("UserInputService")
+
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if not gameProcessed and input.KeyCode == Enum.KeyCode.E then
+        toggleFrameVisibility()
+    end
+end)
